@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 width="100%"
+		 minHeight="100">
+
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.controller.MapManger;
+			import com.aol.mq.ptype.events.WinstonEvent;
+			protected function btn_clickHandler(event:MouseEvent):void
+			{
+				
+				this.currentState=(this.currentState == "normal"? "collapsed" : "normal");
+				this.height=(this.currentState == "normal"? boxer.height : 100);
+				this.btn.label = this.currentState;
+				
+
+			}
+
+			protected function btn0_clickHandler(event:MouseEvent):void
+			{
+				MapManger.getInstance().dispatchEvent(new WinstonEvent("close",this));
+			}
+			private function addItem(event:MouseEvent):void	{
+				var btn:Button = new Button();
+				btn.label = "Yahoo!";
+				this.boxer.addElement(btn);
+				trace(this.boxer.height)
+				this.height = this.boxer.height+60;
+			}
+
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="collapsed"/>
+	</s:states>
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Border width="100%" id="border" minHeight="100"
+			  backgroundColor="#CCEEDD" cornerRadius="8"
+			  borderAlpha=".2" height.collapsed="100" height.normal="{this.height-border.y}">
+		<s:Button id="btn"
+				  label="normal"
+				  click="btn_clickHandler(event)"/>
+		<s:Button id="btn0"
+				  label="Remove"
+				  x="130" y="0" click="btn0_clickHandler(event)"/>
+		<s:Button id="addBtn"
+				  label="Add"
+				  x="79" y="0" click="addItem(event)" width="44" includeIn="normal"/>
+		<s:VGroup id="boxer" minHeight="100" width="100%"  x="0" gap="3" y="30" includeIn="normal" color="#DD9988"/>
+	</s:Border>
+</s:Group>
+

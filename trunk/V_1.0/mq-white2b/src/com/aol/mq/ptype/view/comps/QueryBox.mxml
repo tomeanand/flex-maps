@@ -125,7 +125,7 @@
 	<s:TextInput id="queryTxt" skinClass="skins.SearchInputText"  x="34" y="5"/>
 	<mx:Image id="close" source="assets/images/mq-white2b/closeBtn.png" visible="{bgColor == 0xFBF8E0}" click="close_clickHandler(event)"
 			  useHandCursor="true" buttonMode="true" includeIn="routeState" x="321" y="8"/>
-	<mx:Image id="alert" visible="{bgColor == 0xF0C67D}" source="assets/images/mq-white2b/alert.png" width="16" height="16" click="close_clickHandler(event)" x="302" y="9" includeIn="routeState"/>
+	<mx:Image id="alert" visible="{bgColor == 0xF0C67D}" source="assets/images/mq-white2b/alert.png" width="16" height="16" click="onTxtClickEventHandler(event)" x="302" y="9" includeIn="routeState"/>
 	<s:Label includeIn="routeState" x="13" y="12" text="A" id="point" fontWeight="bold" fontSize="11" color="#FCFCFC"/>
 	
 	

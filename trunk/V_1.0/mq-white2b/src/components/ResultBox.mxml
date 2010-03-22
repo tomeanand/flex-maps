@@ -1,43 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 width="100%"
-		 height="100">
+<view:BaseResultBox  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:view="com.aol.mq.ptype.view.*"
+		 xmlns:mx="library://ns.adobe.com/flex/halo" width="100%" creationComplete="creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import com.aol.mq.ptype.controller.MapManger;
 			import com.aol.mq.ptype.events.WinstonEvent;
-			protected function btn_clickHandler(event:MouseEvent):void
+			import com.aol.mq.ptype.utils.Constant;
+			import com.aol.mq.ptype.view.comps.ItemBusiness;
+			import com.aol.mq.ptype.vo.SearchVO;
+			import com.mapquest.tilemap.ShapeCollection;
+			import com.mapquest.tilemap.pois.Poi;
+			
+			import mx.events.FlexEvent;
+			
+			private var imageItem:Object;
+			
+			
+			protected function remove_clickHandler(event:MouseEvent):void
 			{
+				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_REMOVE_RESULT,this));
+			}
+			
+			
 
-				this.height=(this.height == 100 ? 400 : 100)
-
+			protected function viewBtn_clickHandler(event:MouseEvent):void
+			{
+				if(this.isLoaded)	{
+					if(this.showMode == Constant.MODE_MAP_SEARCH_BOX)	{
+						this.currentState = (this.currentState == "normal" ? "collapsed" : "normal");
+						if(this.currentState == "normal")	{
+							showBusiness()
+						}
+						else	{
+							model.mapPanel.removeAllShapes();
+							model.mapPanel.map.removeShapeCollection(model.shapeCollection);
+						}
+					}
+					else if(this.showMode == Constant.MODE_BIZ_LOCATE_BOX)	{
+						this.currentState = (this.currentState == "normal" ? "bizCollapsed" : "normal");
+						if(this.currentState == "normal")	{
+							showBusiness()
+						}
+						else	{
+							imageItem = this.getClickedBizItem();
+							image.source =  new imageItem.img;
+							model.mapPanel.removeAllShapes();
+							model.mapPanel.map.removeShapeCollection(model.shapeCollection);
+						}
+					}
+					else	{
+						// do nothing
+					}
+				}
+			}
+			
+			override public function minimize() : void		{
+				if(this.showMode == Constant.MODE_BIZ_LOCATE_BOX)	{
+					this.currentState = "collapsed";
+				}
 			}
 
-			protected function btn0_clickHandler(event:MouseEvent):void
+
+			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				MapManger.getInstance().dispatchEvent(new WinstonEvent("close",this));
+				MapManger.getInstance().addEventListener(Constant.EVENT_SEARCH_BUSINESS_FROM_MAP,populateBisiness);
+				
+			}
+			
+			private function populateBisiness(event:WinstonEvent):void	{
+				this.bizCollection = event.data;
+				this.isLoaded = true;
+				var svo:SearchVO;
+				
+				var shapeCollection:ShapeCollection = new ShapeCollection();
+				var poi:Poi
+				var btn:ItemBusiness;
+				if(bizCollection!= null)	{	
+					for(var i:Number = 0; i<bizCollection.length; i++)	{
+						btn = new ItemBusiness();
+						svo = bizCollection[i] as SearchVO;
+						btn.vo = svo;
+						
+						poi = new Poi(svo.latlng);
+						poi.latLng = svo.latlng;
+						
+						
+						//poi.label = String(svo.name).substring(0,1).toUpperCase();
+						poi.infoTitle = svo.address+" - "+svo.name;
+						poi.infoContent =svo.address+", "+ svo.city+", "+svo.state+"\n"+svo.zip+"\n Phone : "+svo.phone
+						
+						shapeCollection.add(poi);
+						resultBox.addElement(btn);
+					}
+					if(model.searchOrigin != Constant.SEARCH_FROM_BIZL)	{
+						model.shapeCollection = shapeCollection;
+						model.mapPanel.map.addShapeCollection(shapeCollection);
+					}
+					model.mapPanel.map.setCenter(poi.latLng,9);
+				}
 			}
 
 		]]>
-	</fx:Script>
+	</fx:Script> 
+	<view:states>
+		<s:State name="normal"/>
+		<s:State name="collapsed"/>
+		<s:State name="bizCollapsed"/>
+	</view:states>
 
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Border width="100%"
-			  height="100%"
-			  cornerRadius="10"
-			  backgroundColor="#CCEEDD"
-			  borderAlpha=".2">
-		<s:Button id="btn"
-				  label="Collapse"
-				  click="btn_clickHandler(event)"/>
-		<s:Button id="btn0"
-				  label="Remove"
-				  x="130" y="0" click="btn0_clickHandler(event)"/>
-	</s:Border>
-</s:Group>
-
+	
+	<s:Border id="bgBorder"
+			  width="100%"
+			  height="{holder.height}"
+			  backgroundColor="#FBF8E0"
+			  borderColor="#CECFCE"
+			  borderAlpha="0.6"
+			  borderStyle="solid"
+			  cornerRadius="5" minHeight="70" includeIn="normal"/>
+	<mx:Image source="assets/images/mq-white2b/loading.swf" visible="{!this.isLoaded}" id="img" x="{this.width/2 - img.width/2}" y="{(this.height/2 - this.img.height/2)+10}" includeIn="normal"/>
+			<mx:VBox id="holder" width="100%" includeIn="normal">
+				<s:Group>
+					<mx:Text color="#1086C6" fontFamily="Verdana" fontSize="10" fontWeight="bold" htmlText="{String('Search on Map for \n'+this.searchQueryStr)}" x="11" y="3"/>
+					<s:Label text="Close" buttonMode="true" useHandCursor="true" x="280" y="7" fontSize="10" id="viewBtn" click="viewBtn_clickHandler(event)"/>
+					<s:Label text="|  Remove" x="310" y="7" id="remove" buttonMode="true" fontSize="10" useHandCursor="true" click="remove_clickHandler(event)"/>
+				</s:Group>
+				<s:VGroup id="resultBox" left="15" width="95%"  minHeight="50"/>
+			</mx:VBox>	
+			<s:Border id="bgBorder0"
+					  width="100%"
+					  
+					  backgroundColor="#FBF8E0"
+					  borderColor="#CECFCE"
+					  borderAlpha="0.6"
+					  borderStyle="solid"
+					  cornerRadius="5" minHeight="70" includeIn="bizCollapsed,collapsed" height="70"/>
+			<s:Group includeIn="bizCollapsed,collapsed">
+				<mx:Image id="image" x="11" x.bizCollapsed="11" y.bizCollapsed="3"/>
+				<mx:Text color="#1086C6" fontFamily="Verdana" fontSize="10" fontWeight="bold" htmlText="{String('Search on Map for \n'+this.searchQueryStr)}" x="{image.x+image.width+5}" y="3"/>
+				<s:Label text="View" buttonMode="true" useHandCursor="true" x="280" y="7" fontSize="10" id="viewBtn0" click="viewBtn_clickHandler(event)"/>
+				<s:Label text="|  Remove" x="310" y="7" id="remove0" buttonMode="true" fontSize="10" useHandCursor="true" click="remove_clickHandler(event)"/>
+			</s:Group>
+			<s:VGroup id="resultBox0" left="15" width="95%"  height="50" includeIn="bizCollapsed,collapsed"/>
+</view:BaseResultBox>

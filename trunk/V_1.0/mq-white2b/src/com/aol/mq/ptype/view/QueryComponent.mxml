@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view:BaseResultBox xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:view="com.aol.mq.ptype.view.*" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 width="100%"
+		 creationComplete="creationCompleteHandler(event)" resizeEffect="{mx.effects.Resize}">
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.controller.GeoCodeManager;
+			import com.aol.mq.ptype.controller.MapManger;
+			import com.aol.mq.ptype.events.WinstonEvent;
+			import com.aol.mq.ptype.model.ModelLocator;
+			import com.aol.mq.ptype.utils.Constant;
+			import com.aol.mq.ptype.view.comps.ItemBusiness;
+			import com.aol.mq.ptype.view.comps.ItemRoute;
+			import com.aol.mq.ptype.view.comps.QueryBox;
+			import com.aol.mq.ptype.vo.ManeuverVO;
+			import com.aol.mq.ptype.vo.RouteVO;
+			import com.aol.mq.ptype.vo.SearchVO;
+			import com.mapquest.services.geocode.GeocoderLocation;
+			import com.mapquest.tilemap.pois.Poi;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.IViewCursor;
+			import mx.effects.Resize;
+			import mx.events.FlexEvent;
+
+
+			
+			private var geoManager:GeoCodeManager;
+
+			private var queries:ArrayCollection;
+
+			private var index:Number=0;
+			private var pageNumber:Number=0;
+			private var totalClick:Number=0;
+			private var totalResult:Number=0;
+			
+			
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				geoManager=new GeoCodeManager(model.mapPanel.map.tileMap);
+				geoManager.addEventListener(Constant.EVENT_GEOCODED_AMBIGUITIES, showAmbiquities);
+				MapManger.getInstance().addEventListener(Constant.EVENT_DISAMBIGUITIED, disambiguitedFinish);
+				MapManger.getInstance().addEventListener(Constant.EVENT_DELETE_QUERY, deleteQuery);
+				MapManger.getInstance().addEventListener(Constant.EVENT_SEARCH_BUSINESS, showInitialBusiness);
+				MapManger.getInstance().addEventListener(Constant.EVENT_SHOW_DIRECTIONS, showDirection);
+				queries=new ArrayCollection();
+				createQueryBox();
+				}
+			protected function clickHandler(event:MouseEvent):void
+			{
+				if(queries.length<=1)	{
+					this.searchQueryStr = queries[0].getText();
+					model.searchOrigin = Constant.SEARCH_FROM_BOX;
+					MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_SEARCH_PLACE,queries[0].getText()))
+				}
+				else	{
+					var locations:Array = getRoutes();
+					model.mapPanel.removeAllShapes();
+					geoManager.batchGeoCode(locations)
+				}
+			}
+			private function deleteQuery(event:WinstonEvent):void	{
+				var query:QueryBox;
+				var qbox:QueryBox 
+				var count:Number = 0;
+				queryHolder.removeElement(event.data);
+				queries.removeItemAt(event.data.index);
+				model.isRoute = (queries.length<2) ? false : true;
+				var cursor:IViewCursor = queries.createCursor();
+				var boxes:Number = queryHolder.numElements;
+				while(!cursor.afterLast)	{
+					query = cursor.current as QueryBox;	
+					for(var i:Number = 0; i<boxes; i++)	{
+						qbox = queryHolder.getElementAt(i) as QueryBox
+						if(qbox == query)	{
+							qbox.index = count
+							query.index = count;
+							query.setPoint(count);
+							query.lastItem = (query.index == queries.length-1) ? true : false;
+							query.setIcons();
+							count++
+							break;
+						}
+					}
+					index = i+1; 
+					cursor.moveNext();
+				}
+				if(index <2){
+					ModelLocator.getInstance().mapMode = Constant.MODE_SEARCH_BUSINESS;
+					submitBtn.label = "Map It";
+					addQueryCntl.text = "Get Directions"
+				}
+				else	{
+					model.mapMode = Constant.MODE_SEARCH_ROUTE;
+					submitBtn.label = "Get Directions";
+					addQueryCntl.text = "Add destinations"
+				}
+			}
+			private function getRoutes():Array	{
+				var locationCollection:Array = new Array();
+				var location:GeocoderLocation;
+				var qBox:QueryBox;
+				var cursor:IViewCursor = queries.createCursor();
+				while(!cursor.afterLast)	{
+					qBox = cursor.current as QueryBox;
+					location = new GeocoderLocation();
+					location.location = qBox.getText();
+					locationCollection.push(location);
+					cursor.moveNext();
+				}
+				return locationCollection;
+			}
+			private function showInitialBusiness(event:WinstonEvent):void	{
+				pageNumber = 0
+				totalClick = Math.ceil(model.bizData.length/Constant.ROW_PER_PAGE)
+				totalResult = model.bizData.length;
+				
+				resultBox.removeAllElements();
+				//showPageNavigation()
+				resultLbl.text = "      "+ queries[0].getText();
+				this.bizCollection = model.bizData;
+				var sdata :ArrayCollection = model.bizData as ArrayCollection;
+				var btn:ItemBusiness;
+				if(sdata!= null)	
+					for(var i:Number = 0; i<sdata.length; i++)	{
+						btn = new ItemBusiness();
+						btn.vo = sdata[i] as SearchVO;
+						resultBox.addElement(btn);
+					}
+				closeTxt.visible = true;
+				
+			}
+			private function showDirection(event:WinstonEvent):void	{
+				pageNumber = 0
+				totalClick = Math.ceil(model.routeVO.maneuver.length/Constant.ROUTE_PER_PAGE)
+				totalResult = model.routeVO.maneuver.length
+				resultBox.removeAllElements();
+				
+				var routeVO:RouteVO = model.routeVO; 
+				var routes:ArrayCollection = routeVO.maneuver;
+				var item:ItemRoute
+				for(var i:Number=0; i<routes.length; i++)	{
+					item = new ItemRoute();
+					item.vo = routes[i] as ManeuverVO;
+					this.resultBox.addElement(item);
+				}
+				var time:Array = routeVO.formattedTime.split(":");
+				resultLbl.text = "      "+time[0] +" Hr "+time[1]+" Minutes   /  "+routeVO.distance+ " Miles." ;
+				closeTxt.visible = true;
+				//showPageNavigation()
+				
+			}
+			
+			private function showAmbiquities(event:WinstonEvent):void	{
+				var ambiList:ArrayCollection = event.data as ArrayCollection;
+				var qbox:QueryBox;
+				var isAmbiguited:Boolean = false;
+				/**
+				 * This is temp vars
+				 * 
+				 **/
+				var poi:Poi;
+				var loc:GeocoderLocation;
+				var list:Array = new Array();
+				var locList:Array = new Array();
+				var ambiLocations:Array
+				for(var i:Number = 0; i<queries.length; i++)	{
+					qbox = queries[i] as QueryBox;
+					ambiLocations = ambiList[i]
+					qbox.ambiguities = ambiLocations ;
+					if(ambiLocations.length >1)	{
+						model.totalAmbiguites ++;
+						isAmbiguited = true;
+					}
+					loc = ambiList[i][0];
+					qbox.geoLocation = loc;
+					poi = new Poi(loc.displayLatLng);
+					poi.label = Number(i+1).toString();
+					poi.infoTitle = loc.city+", "+loc.adminArea3;
+					poi.infoWindowTitleText = loc.city+","+loc.adminArea3;
+					poi.infoContent = getAddress(loc)
+					list.push(poi);
+					locList.push(loc);
+				}
+				model.mapPanel.removeAllShapes();
+				if(!isAmbiguited)	{
+					MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_ROUTE_SELECT_SUCCESS,{poi:locList,loc:list}));
+				}
+				
+				
+			}
+			private function disambiguitedFinish(event:WinstonEvent):void	{
+				var ambiList:ArrayCollection = event.data as ArrayCollection;
+				var qbox:QueryBox;
+				
+				var poi:Poi;
+				var loc:GeocoderLocation;
+				var list:Array = new Array();
+				var locList:Array = new Array();
+				var ambiLocations:Array
+				for(var i:Number = 0; i<queries.length; i++)	{
+					qbox = queries[i] as QueryBox;
+					loc = qbox.geoLocation
+					poi = new Poi(loc.displayLatLng);
+					poi.label = Number(i+1).toString();
+					poi.infoTitle = loc.city+", "+loc.adminArea3;
+					poi.infoWindowTitleText = loc.city+","+loc.adminArea3;
+					poi.infoContent = getAddress(loc)
+					list.push(poi);
+					locList.push(loc);
+				}
+				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_ROUTE_SELECT_SUCCESS,{poi:locList,loc:list}));
+			}
+			
+			/**
+			 * 
+			 * **
+			 * */
+			private function createQueryBox(isBack:Boolean = false):void	{
+				var query:QueryBox
+				if(!isBack)	{
+					query = new QueryBox();
+					query.index = index;
+					index == 0 ? query.setText("Fluid Coffee Bar, Denver, CO") :  null;
+					query.isRoute = index>0 ? true : false;
+					queries.addItem(query);
+				}
+				queryHolder.removeAllElements();
+				model.isRoute = (queries.length>1) ? true : false;
+				
+				var cursor:IViewCursor = queries.createCursor(); 
+				var route:Boolean = queries.length>0 ? true : false;
+				
+				while(!cursor.afterLast)	{
+					
+					query = cursor.current as QueryBox;
+					query.isRoute = index >0 ? true : false;
+					query.lastItem = (query.index == index) ? true : false;
+					query.setIcons();
+					if(isBack)	{
+						query.ambiguities = new Array();
+					}
+					queryHolder.addElement(query);
+					cursor.moveNext();
+				}
+				index++;
+				
+				if(index <2){
+					model.mapMode = Constant.MODE_SEARCH_BUSINESS;
+					submitBtn.label = "Map It";
+					addQueryCntl.text = "Get Directions"
+				}
+				else	{
+					model.mapMode = Constant.MODE_SEARCH_ROUTE;
+					submitBtn.label = "Get Directions";
+					addQueryCntl.text = "Add destinations"
+				}
+			}
+			private function getAddress( loc:GeocoderLocation):String{
+				var localAddr:String = "";
+				
+				
+				//Create address string to display in the bubble
+				if (loc.street!= "")
+					localAddr += loc.street + ", ";
+				
+				if (loc.city!= null)
+					localAddr += loc.city + ", ";
+				
+				/* if (loc.adminArea5!= null)
+				localAddr += loc.adminArea5 + ", "; */
+				
+				if (loc.adminArea3!= null)
+					localAddr += loc.adminArea3 + ", ";
+				
+				if (loc.adminArea1!= null)
+					localAddr += loc.adminArea1 + "";
+				
+				return localAddr;
+			}
+			protected function addQueryCntClickHandler(event:MouseEvent):void
+			{
+				if(index<Constant.QUERY_COUNT)	{
+					createQueryBox()
+				}
+				else	{
+					mx.controls.Alert.show("Demo Version.");
+				}
+			}
+
+			protected function minimize_clickHandler(event:MouseEvent):void
+			{
+				if(model.mapMode == Constant.MODE_SEARCH_BUSINESS)	{
+					this.currentState = (this.currentState == "normal" ? "collapsed" : "normal");
+					this.currentState == "normal" ? showBusiness() : null
+				}
+				else	{
+					this.currentState = (this.currentState == "normal" ? "route" : "normal");
+					this.currentState == "route" ? showShortRoute() : model.mapPanel.showTraffic(true)	
+				}
+			}
+			
+			override public function minimize() : void{
+				if(model.mapMode == Constant.MODE_SEARCH_BUSINESS)	{
+					this.currentState =  "collapsed" ;
+				}
+				else	{
+					this.currentState = "route";
+					showShortRoute()
+				}
+				
+			} 
+			
+			private function showShortRoute():void	{
+				model.mapPanel.showTraffic(false)	
+				if(model.routeVO.maneuver.length>1)	{
+					this.shortRoute.removeAllElements();
+					var route1:ItemRoute = new ItemRoute();
+					var route2:ItemRoute = new ItemRoute();
+					var image:Image = new Image();
+					image.source = Constant.IMGARROWLONG;
+					route1.isMinimised = route2.isMinimised = true;
+					route1.vo = model.routeVO.maneuver.getItemAt(0) as ManeuverVO;
+					route2.vo = model.routeVO.maneuver.getItemAt(model.routeVO.maneuver.length-1)as ManeuverVO;
+					this.shortRoute.addElement(route1);
+					this.shortRoute.addElement(image);
+					this.shortRoute.addElement(route2);
+				}
+			}
+			
+
+		]]>
+	</fx:Script>
+	<view:states>
+		<s:State name="normal"/>
+		<s:State name="collapsed"/>
+		<s:State name="route"/>
+		<s:State name="routeCollapsed"/>
+	</view:states>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Border id="bgBorder"
+			  width="100%"
+			  height="{queryBox.height}"
+			  backgroundColor="#FBF8E0"
+			  borderColor="#CECFCE"
+			  top="20"
+			  borderAlpha="0.6"
+			  borderStyle="solid"
+			  cornerRadius="5" includeIn="normal"/>
+	<mx:VBox id="queryBox"
+			 width="100%"
+			 top="20" includeIn="normal">
+
+		<s:Group top="10"
+				 bottom="10">
+			<s:Label x="34"
+					 top="10"
+					 text="Find a Place, Address or Intersection"
+					 color="#848E84"
+					 fontWeight="bold"
+					 fontFamily="Verdana"
+					 fontSize="10"/>
+			
+			<s:Label x="294" visible="false"
+					 top="10"
+					 text="Close "
+					 color="#F95050"
+					 fontWeight="bold"
+					 fontFamily="Verdana" id="closeTxt" useHandCursor="true" buttonMode="true"
+					 fontSize="10" click="minimize_clickHandler(event)"/>
+			
+		</s:Group>
+		<s:VGroup gap="0"
+				  id="queryHolder"/>
+
+		<mx:Canvas width="100%"
+				   id="holder">
+			<mx:Image id="plus"
+					  left="34"
+					  useHandCursor="true"
+					  buttonMode="true"
+					  source="assets/images/mq-white2b/plus.png"
+					  width="15"
+					  height="15" click="addQueryCntClickHandler(event)"/>
+			<s:Label text="Get Directions"
+					 paddingTop="3"
+					 x="{plus.x+plus.width+10}"
+					 color="#1086C6"
+					 fontFamily="Verdana"
+					 fontSize="12"
+					 fontWeight="bold"
+					 useHandCursor="true"
+					 buttonMode="true"
+					 id="addQueryCntl" click="addQueryCntClickHandler(event)"/>
+
+			<s:Button id="submitBtn"
+					  useHandCursor="true"
+					  buttonMode="true"
+					  skinClass="skins.ButtonRed"
+					  label="Map It"
+					  x="{holder.width-submitBtn.width-62}"
+					  bottom="15" click="clickHandler(event)"/>
+
+		</mx:Canvas>
+<s:Label id="resultLbl" fontSize="12" fontWeight="bold" color="#1086C6" text="" left="15"/>
+<s:VGroup id="resultBox" left="15" width="95%"/>
+		
+	</mx:VBox>
+	<s:Border id="bgBorder0"
+			  width="100%"
+			  height="70"
+			  backgroundColor="#FBF8E0"
+			  borderColor="#CECFCE"
+			  top="20"
+			  borderAlpha="0.6"
+			  borderStyle="solid"
+			  cornerRadius="5" includeIn="collapsed,routeCollapsed"/>
+	<mx:VBox id="queryBox0"
+			 width="100%"
+			 top="20" includeIn="collapsed,routeCollapsed">
+		
+		<s:Group top="10" bottom="10">
+			<s:Label x="210" useHandCursor="true" buttonMode="true" top="10"
+					 text="View Search Results"
+					 color="#F95050"
+					 fontWeight="bold"
+					 fontFamily="Verdana"
+					 fontSize="10"
+					 click="minimize_clickHandler(event)" />
+		</s:Group>
+		<s:Group top="10" bottom="10">
+		<s:Label top="10" left="20"
+				 text="{String('You searched for : \n'+this.searchQueryStr)}"
+				 color="#1086C6"
+				 fontWeight="bold"
+				 fontFamily="Verdana"
+				 fontSize="10"
+				 />
+		</s:Group>	
+	<s:VGroup id="resultBox0" left="15" width="95%"/>
+		
+	</mx:VBox>
+	<s:Border id="bgBorder1"
+			  width="100%"
+			  height="70"
+			  backgroundColor="#FBF8E0"
+			  borderColor="#CECFCE"
+			  top="20"
+			  borderAlpha="0.6"
+			  borderStyle="solid"
+			  cornerRadius="5" includeIn="route"/>
+	<mx:VBox id="queryBox1"
+			 width="100%"
+			 top="20" includeIn="route">
+		
+		<s:Group top="10"
+				 bottom="10">
+			<s:Label x="240" useHandCursor="true" buttonMode="true"
+					 top="10"
+					 text="View Directions"
+					 color="#F95050"
+					 fontWeight="bold"
+					 fontFamily="Verdana"
+					 fontSize="10"
+					 click="minimize_clickHandler(event)" />
+		</s:Group>
+		<s:HGroup top="10" bottom="10" left="10" id="shortRoute" width="100%"/>
+		
+	</mx:VBox>
+
+
+</view:BaseResultBox>
+

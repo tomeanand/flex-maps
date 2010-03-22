@@ -4,6 +4,7 @@ package com.aol.mq.ptype.model
 	import com.aol.mq.ptype.view.MapPanel;
 	import com.aol.mq.ptype.view.comps.AmbiguitiesBox;
 	import com.aol.mq.ptype.vo.RouteVO;
+	import com.mapquest.tilemap.ShapeCollection;
 	
 	import mx.collections.ArrayCollection;
 
@@ -18,6 +19,10 @@ package com.aol.mq.ptype.model
 		public var mapMode:String
 		public var ambigutiy:AmbiguitiesBox;
 		public var totalAmbiguites:Number = 0;
+		
+		public var searchQueryStr:String = "";
+		public var searchOrigin:String = "";
+		public var shapeCollection:ShapeCollection;
 		
 		public var mapPanel:MapPanel;
 		

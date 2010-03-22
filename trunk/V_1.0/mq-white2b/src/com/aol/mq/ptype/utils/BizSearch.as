@@ -13,6 +13,7 @@ package com.aol.mq.ptype.utils
 	import flash.events.IEventDispatcher;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
@@ -49,16 +50,26 @@ package com.aol.mq.ptype.utils
 				}
 				model.bizData = bizCollection;
 				if(bizCollection.length != 0)	{
+					//checking the origination of search
+					if(model.searchOrigin == Constant.SEARCH_FROM_BOX)	{
 						MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_SEARCH_BUSINESS,bizCollection.getItemAt(0)));
+					}
+					else	{
+						MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_SEARCH_BUSINESS_FROM_MAP,bizCollection));
+					}
+						
 				}
 			}
 			
 			else	{
 				var shapCollection:ShapeCollection = new ShapeCollection();
 				for each(biz in data.result)	{
+					var bizVO:SearchVO = createSearchData(biz);
+					bizCollection.addItem(bizVO);
 					shapCollection.add(createPOI(biz));
 				}
 				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_BUSINESS_LOCATED_SUCEESS,shapCollection));
+				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_SEARCH_BUSINESS_FROM_MAP,bizCollection));
 			}
 			
 		}

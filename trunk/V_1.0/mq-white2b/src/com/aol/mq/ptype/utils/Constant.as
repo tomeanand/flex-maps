@@ -6,6 +6,7 @@ package com.aol.mq.ptype.utils
 		// replacing the above strings in the businessQuery searchInLocation,totalResults
 		public static const EVENT_SEARCH_PLACE : String = "SearchPlace";
 		public static const EVENT_SEARCH_BUSINESS : String = "SearchBusiness";
+		public static const EVENT_SEARCH_BUSINESS_FROM_MAP : String = "SearchBusinessFromMap";
 		public static const EVENT_SEARCH_DIRECTIONS : String = "SearchDirections";
 		public static const EVENT_SHOW_DIRECTIONS : String = "ShowDirections";
 		public static const EVENT_DELETE_QUERY : String = "DeleteQuery";
@@ -13,15 +14,30 @@ package com.aol.mq.ptype.utils
 		public static const EVENT_DISAMBIGUITIED : String = "DisAmbiguited";
 		public static const EVENT_ROUTE_SELECT_SUCCESS : String = "RouteSelectSuccess";
 		public static const EVENT_BUSINESS_LOCATED_SUCEESS : String = "BusinessLocated";
+		public static const EVENT_CLICK_BIZLOCATOR : String = "ClickBusLocator";
+		
+		
+		public static const EVENT_MAP_SEARCHBOX : String = "MapSearchBoxClick";
+		public static const EVENT_REMOVE_RESULT : String = "RemoveResultBox";
 		
 		public static const ROUTE_POINTS : Array = [{index:0,data:"A"},{index:1,data:"B"},{index:3,data:"C"},{index:4,data:"D"},{index:5,data:"E"},
-			{index:6,data:"F"},{index:7,data:"G"},{index:8,data:"H"},{index:9,data:"I"},{index:10,data:"J"},{index:11,data:"K"},{index:12,data:"L"}]
+			{index:6,data:"F"},{index:7,data:"G"},{index:8,data:"H"},{index:9,data:"I"},{index:10,data:"J"},{index:11,data:"K"},{index:12,data:"L"},
+			{index:13,data:"M"},{index:14,data:"N"},{index:15,data:"O"},{index:16,data:"P"},{index:17,data:"Q"},{index:18,data:"R"},{index:19,data:"S"}]
 			
 		public static const ROW_PER_PAGE : Number = 5;
 		public static const ROUTE_PER_PAGE : Number = 7;
+		public static const QUERY_COUNT : Number = 19;
 		
 		public static var MODE_SEARCH_BUSINESS : String = "SearchBusiness";
 		public static var MODE_SEARCH_ROUTE : String = "SearchRoute";
+		
+		public static var MODE_BIZ_LOCATE_BOX : String = "BizLocateBox";
+		public static var MODE_MAP_SEARCH_BOX : String = "MapSearchBox";
+		
+		
+		public static var SEARCH_FROM_MAP : String = "SearchFromMap";
+		public static var SEARCH_FROM_BOX : String = "SearchFromBox";
+		public static var SEARCH_FROM_BIZL : String = "SearchFromBox";
 		
 		public static const MAP_KEY : String = "Dmjtd|lu612007nq%2C20%3Do5-50zah";//"Dmjtd%7Cluu721ua2g%2Cag%3Do5-5a8n5"//"mjtd%7Clu6y206bng%2C25%3Do5-lwbw0";
 		
@@ -44,6 +60,12 @@ package com.aol.mq.ptype.utils
 		
 		[Embed (source="assets/images/mq-white2b/restaureant.png")]
 		public static const  IMGRESTAURANT:Class;
+		
+		[Embed (source="assets/images/mq-white2b/stop.gif")]
+		public static const  IMGSTAR:Class;
+		
+		[Embed (source="assets/images/mq-white2b/longarrow.png")]
+		public static const  IMGARROWLONG:Class;		
 		
 		public static const BIZ_LOCATOR_LIST : Array = new Array(
 			{name:"Best Western", img:IMGBESTWESTERN},

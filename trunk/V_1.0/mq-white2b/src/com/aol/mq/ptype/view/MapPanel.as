@@ -101,13 +101,12 @@ package com.aol.mq.ptype.view
 			this.poi = new Poi(this.map.center);
 			this.map.addShape(this.poi);
 			
-			initialiseBizLocator();
+			/*initialiseBizLocator();
 			carousel = new OBCarouselControl( carouselItems, carouselItems.length );
 			carousel.addEventListener(OBCarouselEvent.EVENT_ITEM_CLICK,onBizLocatorClick);
-			map.addControl(carousel, new MapCornerPlacement(MapCorner.BOTTOM_LEFT,new Size(5,5)) );
+			map.addControl(carousel, new MapCornerPlacement(MapCorner.BOTTOM_LEFT,new Size(5,5)) );*/
 			
-			/*var mfGlass:MagnifyGlassBox = new MagnifyGlassBox(this.map.tileMap);
-			this.map.addControl(mfGlass,new MapCornerPlacement(MapCorner.BOTTOM_LEFT,new Size(15,15)));*/
+			
 			
 			this.map.addEventListener(TileMapEvent.ZOOM_END,onMapZoom);
 			
@@ -122,6 +121,8 @@ package com.aol.mq.ptype.view
 			bizSearch = new BizSearch();
 			MapManger.getInstance().addEventListener(Constant.EVENT_SEARCH_PLACE,showPlace);
 			MapManger.getInstance().addEventListener(Constant.EVENT_SEARCH_BUSINESS,showBusiness);
+			
+			MapManger.getInstance().addEventListener(Constant.EVENT_CLICK_BIZLOCATOR,onBizClick);
 			MapManger.getInstance().addEventListener(Constant.EVENT_BUSINESS_LOCATED_SUCEESS,businessLocated);
 			MapManger.getInstance().addEventListener(Constant.EVENT_SEARCH_DIRECTIONS,geoCodeDirections);
 			MapManger.getInstance().addEventListener(Constant.EVENT_ROUTE_SELECT_SUCCESS,showDirections);
@@ -136,8 +137,25 @@ package com.aol.mq.ptype.view
 			if(event.type == DirectionsEvent.DIRECTIONS_SUCCESS)	{
 				if(event.routeType == "route")	{
 					var route:XML = event.legsXml as XML;
-					
+					var locations = event.xml
 					var maneuvers:XMLList = route.leg.maneuvers.maneuver;
+					var locationList:XMLList = locations.route.locations.location;
+					
+					var geoLoc:XML = locationList[0]
+					var geoLoc1:XML = locationList[locationList.length()-1];
+					var boldTag:String = '<b>';
+				
+					latlng = new LatLng(Number(geoLoc.latLng.lat),Number(geoLoc.latLng.lng));
+						
+					var firstItem:ManeuverVO = new ManeuverVO(latlng,"","","","",
+						'<b>'+geoLoc.street+", "+geoLoc.adminArea5+"\n    "+geoLoc.adminArea3,"","","",geoLoc.street,"assets/images/mq-white2b/stop.gif","",true,
+						geoLoc.adminArea5+', '+geoLoc.adminArea3);
+					manvrList.addItem(firstItem);
+					latlng = new LatLng(Number(geoLoc1.latLng.lat),Number(geoLoc1.latLng.lng));
+					var lastItem:ManeuverVO = new ManeuverVO(latlng,"","","","",
+						'<b>'+geoLoc1.street+", "+geoLoc1.adminArea5+"\n    "+geoLoc1.adminArea3,"","","",geoLoc1.street,"assets/images/mq-white2b/stop.gif","",true,
+						geoLoc1.adminArea5+', '+geoLoc1.adminArea3);
+					
 					
 					for each(var manuervs:XML in maneuvers)	{
 						latlng = new LatLng(Number(manuervs.startPoint.lat),Number(manuervs.startPoint.lng));
@@ -161,6 +179,7 @@ package com.aol.mq.ptype.view
 							manuervs.mapUrl);
 						manvrList.addItem(manVO);
 					}
+					manvrList.addItem(lastItem);
 					routeVO = new RouteVO(route.leg.distance,route.leg.time,route.leg.formattedTime,manvrList);
 					model.routeVO = routeVO;
 					MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_SHOW_DIRECTIONS,null));
@@ -238,7 +257,7 @@ package com.aol.mq.ptype.view
 			direction.route();
 		}
 		public function removeAllShapes():void	{
-			direction != null ? direction.removeRoute() : null;
+			//direction != null ? direction.removeRoute() : null;
 			poiCollection != null ? map.removeShapeCollection(poiCollection) : null;
 			map.removeShapes();
 		}
@@ -274,14 +293,17 @@ package com.aol.mq.ptype.view
 			geoCoder.reverseGeocode(map.center);
 			
 		}
-		
+		private function onBizClick(event:WinstonEvent):void	{
+			this.selectedBusiness = event.data;
+			geoCoder.reverseGeocode(map.center);
+		}
 		private function businessLocated(event:WinstonEvent):void	{
 			/**
 			 * Kludge
 			 * Just to see the pois on the map
 			 * will have to fix it in this point.
 			 * */
-			var ci:OBCarouselItem
+			/*var ci:OBCarouselItem
 			var bls:Array = Constant.BIZ_LOCATOR_LIST;
 			for(var i:Number = 0; i<bls.length; i++)	{
 				ci = carouselItems[i] as OBCarouselItem
@@ -295,6 +317,9 @@ package com.aol.mq.ptype.view
 					ci.selected = false;
 				}
 			}
+			map.zoom = 5;*/
+			model.shapeCollection = event.data;
+			map.addShapeCollection(event.data);
 			map.zoom = 5;
 			
 		}
@@ -309,6 +334,10 @@ package com.aol.mq.ptype.view
 				}
 			}
 			return item;
+		}
+		
+		public function showTraffic(isShow:Boolean):void	{
+			traffic.flowOpacity = (isShow ? 0.2 : 0);
 		}
 	}
 }
