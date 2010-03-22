@@ -4,9 +4,10 @@
 			   xmlns:mx="library://ns.adobe.com/flex/halo" minWidth="1024" minHeight="768" xmlns:components="components.*" creationComplete="application1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import mx.events.ResizeEvent;
 			import com.aol.mq.ptype.controller.MapManger;
 			import com.aol.mq.ptype.events.WinstonEvent;
-			import components.ResultBox;
+			import components.ResultBoxes;
 			
 			
 			import mx.events.FlexEvent;
@@ -16,7 +17,7 @@
 			{
 				//var result:ResultBox =  ResultBox();
 				//this.boxer.addElement(result);
-				var rslt:ResultBox = new ResultBox();
+				var rslt:ResultBoxes = new ResultBoxes();
 				this.boxer.addElement(rslt);
 			}
 
@@ -30,6 +31,7 @@
 				this.boxer.removeElement(event.data);
 			}
 
+
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -37,8 +39,9 @@
 	</fx:Declarations>
 	<s:Button id="addBtn" label="Add Box" x="490" y="20" click="addBtn_clickHandler(event)"/>
 
-		<mx:VBox height="400">
-			<s:VGroup width="100%" height="100%" gap="10" id="boxer"/>
+		<mx:VBox height="735" backgroundColor="#CCDDDD" >
+			<s:VGroup width="100%" height="100%" id="boxer"/>
+			<mx:Image left="23" useHandCursor="true" id="addImg" buttonMode="true" source="assets/images/mq-white2b/Image_0009.png" y="4"/>
 		</mx:VBox>
 		
 

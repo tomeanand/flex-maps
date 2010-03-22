@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/halo" width="100%" creationComplete="creationCompleteHandler(event)">
+
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.controller.MapManger;
+			import com.aol.mq.ptype.events.WinstonEvent;
+			import com.aol.mq.ptype.utils.Constant;
+			
+			import mx.controls.Image;
+			import mx.events.FlexEvent;
+			
+			private var image_arr:Array = new Array();
+			
+			protected function searchBtn_clickHandler(event:MouseEvent):void
+			{
+				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_MAP_SEARCHBOX,queryTxt.text));
+			}
+
+
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				var data:Array = Constant.BIZ_LOCATOR_LIST;
+				var image:Image;
+				for(var i:Number = 0; i<data.length; i++)	{
+					image = new Image();
+					image.alpha = .8
+					image.source = data[i].img;
+					image.toolTip = data[i].name;
+					image.useHandCursor = true;
+					image.buttonMode = true;
+					image.addEventListener(MouseEvent.CLICK,onImageClickEvent)
+					this.bizlocator.addElement(image);
+				}
+			}
+			
+			private function onImageClickEvent(event:MouseEvent):void	{
+				for(var i:Number = 0; i<bizlocator.numChildren; i++)	{
+					bizlocator.getElementAt(i).width = 30;
+					bizlocator.getElementAt(i).height = 30;
+					bizlocator.getElementAt(i).alpha = .8
+				}
+				event.currentTarget.width = event.currentTarget.height = 32;
+				event.currentTarget.alpha = 1;
+				var img:Image = event.currentTarget as Image;
+				MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_CLICK_BIZLOCATOR,img.toolTip.toString()));
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Border id="bgBorder"
+			  width="98%"
+			  left="10"
+			  top="5"
+			  height="38"
+			  backgroundColor="#D6D5CA"
+			  backgroundAlpha="0.5"
+			  borderColor="#5D615D"
+			  borderAlpha="0.3"
+			  borderStyle="solid"
+			  cornerRadius="5" />
+	<s:HGroup x="20" y="7" id="bizlocator">
+		<!--<mx:Image source="assets/images/mq-white2b/bwestern.png"/>
+		<mx:Image source="assets/images/mq-white2b/gas.png"/>
+		<mx:Image source="assets/images/mq-white2b/hospital.png"/>
+		<mx:Image source="assets/images/mq-white2b/restaureant.png"/>
+		<mx:Image source="assets/images/mq-white2b/shield.png"/>
+		<mx:Image source="assets/images/mq-white2b/movie.png" click="image1_clickHandler(event)"/>-->
+	</s:HGroup>
+	<s:Button id="searchBtn" click="searchBtn_clickHandler(event)" x="{(this.width-this.searchBtn.width)-50}" y="12"  label="Search" color="#2996D6" fontWeight="bold" fontSize="11" height="22" width="70" fontFamily="Verdana"/>
+	<s:TextInput id="queryTxt" skinClass="skins.SearchInputText1" text="Fluid Coffee Bar, Denver, CO"  x="{searchBtn.x-queryTxt.width-10}" y="12"/>
+</s:Group>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:mx="library://ns.adobe.com/flex/halo">
+	<fx:Metadata>[HostComponent("spark.components.TextInput")]</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			protected function arrow_clickHandler(event:MouseEvent):void
+			{
+				Alert.show("Demo Version","Winston Prototype");
+				// TODO Auto-generated method stub
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+	
+	<s:Rect id="rect" height="22"  width="263" x="0.5" y="0.5">
+		<s:stroke>
+			<s:SolidColorStroke caps="none" color="#D6D7BD" joints="miter" miterLimit="4" weight="1"/>
+		</s:stroke>
+		<s:fill>
+			<s:SolidColor color="#FCFCFC"/>
+		</s:fill>
+		<s:filters>
+			<s:DropShadowFilter inner="true" angle="90" alpha="0.5" color="#D7D7D7"/>
+			<s:GlowFilter knockout="false" color="#999999" strength="1" inner="true" blurX="2" blurY="2" quality="2" alpha="0.6"/>
+		</s:filters>
+	</s:Rect>
+	
+	<s:RichEditableText multiline="false" x="13" y="5" color="#000000" fontFamily="Verdana" fontSize="11" tabStops="S0 S50 S100"
+						whiteSpaceCollapse="preserve" width="{rect.width-arrow.width+5}" height="12" 
+						id="textDisplay" heightInLines="1">
+	
+	</s:RichEditableText>
+	<mx:Image id="arrow" x="243" y="4" source="assets/images/mq-white2b/arrow.png" click="arrow_clickHandler(event)" width="15" height="15" includeIn="disabled"/>
+</s:Skin>

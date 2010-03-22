@@ -35,13 +35,13 @@
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
-	
-	<mx:Image source="assets/images/mq-white2b/Image_0002.png" id="ad"/>
-	<mx:Image source="@Embed('assets/images/mq-white2b/Image_0012.png')" x="20" y="22"/>
+	<mx:Image source="assets/images/mq-white2b/mapQuest-logo.jpg" id="logo" x="20" y="9"/>
+	<mx:Image source="assets/images/mq-white2b/MapQuest-ad.jpg" id="ad"/>
+	<!--<mx:Image source="@Embed('assets/images/mq-white2b/Image_0012.png')" x="20" y="22"/>
 	<s:Button click="clickHandler(event)" x="212" y="25" skinClass="skins.ButtonTop" label="Print" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="55" fontFamily="Verdana"/>
 	<s:Button click="clickHandler(event)" x="282" y="25" skinClass="skins.ButtonTop" label="Send" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="55" fontFamily="Verdana"/>
 	<s:Button click="clickHandler(event)" x="352" y="25" skinClass="skins.ButtonTop" label="Share" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="60" fontFamily="Verdana"/>
-	<s:Label click="clickHandler(event)" x="427" y="29" text="Sign in   |   Settings" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="160" fontFamily="Verdana"/>
+	<s:Label click="clickHandler(event)" x="427" y="29" text="Sign in   |   Settings" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="160" fontFamily="Verdana"/>-->
 	
 	<!--<mx:LinkButton label="Sign in" x="434" y="25" color="#2996D6"  fontSize="11" height="18" width="63" fontFamily="Verdana" fontWeight="bold" />
 	<mx:LinkButton label="Settings" x="484" y="25" color="#2996D6"  fontSize="11" height="18" width="73" fontFamily="Verdana" fontWeight="bold" />-->
