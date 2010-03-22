@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties mainApplicationPath="Winston.mxml" projectUUID="624f4251-adc7-42b2-8c2f-a01b8ece25ec" version="6">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="true" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="10.0.32" themeBaseTheme="" themeIsDefault="false" themeIsSDK="true" themeLocation="C:/Program Files/Adobe/Adobe Flash Builder Beta 2/sdks/4.0.0/frameworks/themes/Wireframe" themeMain="wireframe.swc" themeMaxSDK="" themeMinSDK="4.0.0" themeName="Wireframe" themePath="Wireframe" themeSourceLocation="frameworks/projects/wireframe/src" themeSwcLocation="frameworks/themes/Wireframe/wireframe.swc" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+    <themePath>Wireframe</themePath>
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/qtp.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_air.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/qtp_air.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="C:/Program Files/Adobe/Adobe Flash Builder Beta 2/sdks/4.0.0/frameworks/themes/Wireframe/wireframe.swc" sourcepath="C:\Program Files\Adobe\Adobe Flash Builder Beta 2\sdks\4.0.0\frameworks\projects\wireframe\src" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="libs"/>
+    </libraryPath>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/Program Files/Adobe/Adobe Flash Builder Beta 2/sdks/4.0.0/frameworks/themes/Wireframe/wireframe.swc" sourcepath="C:\Program Files\Adobe\Adobe Flash Builder Beta 2\sdks\4.0.0\frameworks\projects\wireframe\src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
+  </compiler>
+  <applications>
+    <application path="Winston.mxml"/>
+    <application path="UITest.mxml"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+</actionScriptProperties>

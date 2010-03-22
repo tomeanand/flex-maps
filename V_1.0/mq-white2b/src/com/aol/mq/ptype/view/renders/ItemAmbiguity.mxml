@@ -1,0 +1,21 @@
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/halo" width="100%" baseColor="#CCDDEE" useHandCursor="true" buttonMode="true">
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered"/>
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Border width="100%" x="0" y="0" height="{rule.y}"  borderAlpha="0" 
+			  backgroundColor.hovered="#F0C67D" 
+			  backgroundColor.selected="#ccddee">
+		
+		
+		<mx:Text  id="addr" selectable="false" text="{data.city +', '+data.adminArea3}" x="6" y="1" color="#0886B5"/>
+		<mx:HRule x="10" id="rule" height="1" width="90%" y="{this.addr.y+this.addr.height+5}"/>
+		
+	</s:Border>	
+</s:ItemRenderer>

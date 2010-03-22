@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+		   xmlns:s="library://ns.adobe.com/flex/spark"
+		   xmlns:mx="library://ns.adobe.com/flex/halo"
+		   creationComplete="creationCompleteHandler(event)"
+		   backgroundColor="#F6DFAE"
+		   color="#F6DFAE"
+		   
+		   horizontalScrollPolicy="off" width="318">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.controller.MapManger;
+			import com.aol.mq.ptype.events.WinstonEvent;
+			import com.aol.mq.ptype.model.ModelLocator;
+			import com.aol.mq.ptype.utils.Constant;
+			import com.mapquest.services.geocode.GeocoderLocation;
+
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			private var _ambiguities:Array
+			public var holder:QueryBox;
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				var geo:GeocoderLocation=new GeocoderLocation();
+
+			}
+
+
+			protected function close_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			public function closeBox():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			public function set ambiguities(a:Array):void
+			{
+				intxt.text = 'We found '+a.length+' results for \"'+holder.queryTxt.text+'\"';
+				this._ambiguities=a;
+				amList.dataProvider=new ArrayCollection(ambiguities);
+				
+			}
+
+			public function get ambiguities():Array
+			{
+				return this._ambiguities
+			}
+
+			public function setBoxSize(w:Number, h:Number):void
+			{
+				this.width=w;
+				this.height=h;
+			}
+
+
+
+			protected function amList_clickHandler(event:MouseEvent):void
+			{
+				var data:GeocoderLocation=amList.selectedItem as GeocoderLocation
+				holder.queryTxt.text=data.city + ', ' + data.adminArea3;
+				holder.bgColor=0xFBF8E0;
+
+				holder.geoLocation=data;
+				PopUpManager.removePopUp(this);
+				ModelLocator.getInstance().totalAmbiguites--
+
+				if (ModelLocator.getInstance().totalAmbiguites == 0)
+				{
+					MapManger.getInstance().dispatchEvent(new WinstonEvent(Constant.EVENT_DISAMBIGUITIED, ""));
+				}
+				// TODO Auto-generated method stub
+			}
+		]]>
+	</fx:Script>
+	<mx:Label x="10" id="intxt" fontSize="10" fontFamily="Verdana" fontWeight="bold"
+			  y="-1"
+			  width="284"
+			  color="#050401"/>
+	<mx:Label x="8.5" id="intxt0" fontSize="10" fontFamily="Verdana" fontWeight="bold"
+			  y="16"
+			  width="284"
+			  color="#0886B5" text="Did you mean :"/>
+	<s:List borderAlpha="0"
+			borderVisible="false"
+			id="amList"
+			width="268"
+			itemRenderer="com.aol.mq.ptype.view.renders.ItemAmbiguity"
+			click="amList_clickHandler(event)"
+			x="10"
+			y="32"/>
+	<mx:Image id="close"
+			  source="assets/images/mq-white2b/closeBtn.png"
+			  click="close_clickHandler(event)"
+			  x="299"
+			  y="2"/>
+
+
+</mx:Canvas>

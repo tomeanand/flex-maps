@@ -1,0 +1,91 @@
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark" xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:ai="http://ns.adobe.com/ai/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:flm="http://ns.adobe.com/flame/2008">
+	<fx:Private>
+		<ai:PrivateElement d:ref="#1">
+			<ai:SaveOptions>
+				<ai:Dict data="I preserveGradientPolicy 3 I preserveFilterPolicy 3 B writeImages 1 B includeXMP 0 I preserveTextPolicy 3 B includeSymbol 0 B aiEditCap 1 I versionKey 1 I expandBlendsOption 5 B includeObjectOutsideArtboard 0 B downsampleLinkedImages 1 I rasterizeResolution 72 "/>
+			</ai:SaveOptions>
+			<ai:DocData base="mq-white2b.assets/images" globalOffsetH="-150" globalOffsetV="700" rulerCanvasDiffH="400.5" rulerCanvasDiffV="-299.5">
+				<ai:DocRasterSettings>
+					<ai:Dict data="I colr 4 I dpi. 72 B alis 0 B spot 0 B mask 0 R padd 36 "/>
+				</ai:DocRasterSettings>
+			</ai:DocData>
+			<ai:AutoGenImageList>
+				<ai:Dict>
+					<ai:Entry name="1" value="Image_0002.png" valueType="U"/>
+					<ai:Entry name="3" value="Image_0004.png" valueType="U"/>
+					<ai:Entry name="4" value="Image_0005.png" valueType="U"/>
+					<ai:Entry name="0" value="Image_0001.png" valueType="U"/>
+					<ai:Entry name="2" value="Image_0003.png" valueType="U"/>
+					<ai:Entry name="5" value="Image_0006.png" valueType="U"/>
+					<ai:Entry name="8" value="Image_0009.png" valueType="U"/>
+					<ai:Entry name="6" value="Image_0007.png" valueType="U"/>
+					<ai:Entry name="7" value="Image_0008.png" valueType="U"/>
+					<ai:Entry name="9" value="Image_0010.png" valueType="U"/>
+					<ai:Entry name="10" value="Image_0011.png" valueType="U"/>
+					<ai:Entry name="11" value="Image_0012.png" valueType="U"/>
+				</ai:Dict>
+			</ai:AutoGenImageList>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="03508B8B3CF4B447C36647A5F3CA68D1" d:ref="#2">
+			<ai:LayerOptions color="5 205.6 102.8 154.2" locked="1"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="F0E5114D47C7B34E9F012EA6D63D0FD4" d:ref="#3">
+			<ai:LayerOptions color="5 154.2 0 51.4" locked="1"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="51DDBAD1D378DE48F26222E00932EA97" d:ref="#4">
+			<ai:LayerOptions color="5 257 257 79.31"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="018D18D73DA409E36CDE0B6BCE8F3080" d:ref="#5">
+			<ai:LayerOptions color="5 128.502 128.502 128.502"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="C2A7CAE17A9B525C808B62FDA762D15B" d:ref="#6">
+			<ai:LayerOptions color="5 0 0 0"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="20BB2C2B6DF555DA508C905403C41296" d:ref="#7">
+			<ai:LayerOptions color="5 257 0 102.8"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="8C0444F7E65C48A8200893420E21313A" d:ref="#8">
+			<ai:LayerOptions color="5 257 257 79.31"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="B02BDC9BE23844D89935AB9C1DE06C08" d:ref="#9">
+			<ai:LayerOptions color="5 257 79.31 257"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="A3CCCCD311E0346824FA75A9C961F049" d:ref="#10">
+			<ai:LayerOptions color="5 79.31 257 79.31"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="E24A251A1993C027AC17C228E6B7D93D" d:ref="#11">
+			<ai:LayerOptions color="5 0 0 85.667"/>
+		</ai:PrivateElement>
+		<ai:PrivateElement alternate="1" flm:hashcode="7463D7E39B6C0B1EE7D2F6F4F6D5C784" d:ref="#12">
+			<ai:Rect height="28.42" knockout="0" radiusX="3.895" radiusY="3.895" width="65.158" x="255.833" y="199">
+				<ai:ArtStyle>
+					<ai:PaintFields>
+						<ai:Stroke color="5 0.702 0.702 0.702" focus="1" miterLimit="4" weight="0.25"/>
+						<ai:Fill color="4" focus="1">
+							<ai:Gradient angle="90" gradientType="linear" relLength="1">
+								<ai:GradientStops>
+									<ai:GradientStop color="5 0.933 0.906 0.973" midPoint="37.5" rampPoint="2.247"/>
+									<ai:GradientStop color="5 0.8 0.8 0.8" midPoint="46.512" rampPoint="10.674"/>
+									<ai:GradientStop color="5 0.949 0.949 0.949" rampPoint="93.258"/>
+									<ai:GradientStop color="5 0.8 0.8 0.8" midPoint="22.727" rampPoint="100"/>
+								</ai:GradientStops>
+							</ai:Gradient>
+						</ai:Fill>
+					</ai:PaintFields>
+					<ai:LiveEffects>
+						<ai:LiveEffect index="0" major="1" minor="0" name="Adobe Drop Shadow">
+							<ai:Dict data="R vert 1 R dark 100 I csrc 0 R opac 0.5 R horz 1 I blnd 1 B pair 1 R blur 2 ">
+								<ai:Entry name="sclr" valueType="F">
+									<ai:Fill color="5 0 0 0"/>
+								</ai:Entry>
+							</ai:Dict>
+						</ai:LiveEffect>
+					</ai:LiveEffects>
+				</ai:ArtStyle>
+			</ai:Rect>
+		</ai:PrivateElement>
+		<ai:PrivateElement flm:hashcode="96A9071C910C2F8D6D16E2A2200A6417" d:ref="#13">
+			<ai:LayerOptions color="5 79.31 257 257" locked="1"/>
+		</ai:PrivateElement>
+	</fx:Private>
+</s:Group>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/halo" 
+			   xmlns:view="com.aol.mq.ptype.view.*" 
+			   creationComplete="creationCompleteHandler(event)" 
+			   xmlns:comps="com.aol.mq.ptype.view.comps.*">
+
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace comps "com.aol.mq.ptype.view.comps.*";
+		
+
+		
+	</fx:Style>
+	<fx:Script>
+		
+		<![CDATA[
+			import com.aol.mq.ptype.model.ModelLocator;
+			
+			import mx.effects.Resize;
+			import mx.events.FlexEvent;
+			
+			import spark.effects.Resize;
+			
+			
+			private var isDocked:Boolean = false;
+			
+			protected function rsBtn_clickHandler(event:MouseEvent):void
+			{
+				if(!isDocked)	{
+					arrow.source = "assets/images/mq-white2b/arrow_front.png"
+					resPanel.width = 20;
+					mapHolder.width = bholder.width-20;
+					isDocked = true;
+					ModelLocator.getInstance().mapPanel.map.setActualSize(mapHolder.width,ModelLocator.getInstance().mapPanel.map.height)
+					
+				}
+				else	{
+					arrow.source = "assets/images/mq-white2b/arrow_back.png"
+					isDocked = false;
+					resPanel.width = 380;
+					mapHolder.width = bholder.width-380;	
+					ModelLocator.getInstance().mapPanel.map.setActualSize(mapHolder.width,mapHolder.height);
+				}
+			}
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				Security.allowDomain("http://corrosion:48000/sapi.v2/crossdomain.xml");
+				ModelLocator.getInstance().mapPanel.map.setActualSize(mapHolder.width,mapHolder.height)
+				// TODO Auto-generated method stub
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:Resize id="resize" duration="1" />
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:VGroup gap="0" width="100%" height="100%">
+		<mx:Canvas horizontalScrollPolicy="off" verticalScrollPolicy="off" height="80" width="100%" backgroundColor="#CCDD99">
+			<comps:Header/>
+		</mx:Canvas>
+		<mx:Canvas width="100%" height="100%" horizontalScrollPolicy="off">
+			
+				<!---->
+				<s:VGroup gap="0" width="100%" height="100%">
+					<mx:Canvas width="100%" height="1" backgroundColor="#336655"/>
+					<s:HGroup gap="0" width="100%" height="100%" id="bholder">
+						<mx:Canvas width="380" height="100%" id="resPanel" dropShadowVisible="true"
+								   resizeEffect="{mx.effects.Resize}" backgroundColor="#FFFFFF">
+							
+							<s:HGroup width="100%" height="100%" id="scrollPanel" gap="0" >
+								
+								
+							
+								
+								<s:VGroup id="box" width="100%" height="100%" baseColor="#CCDDEE" paddingLeft="13" paddingRight="5">
+									<comps:LeftRail id="leftRail" width="100%" height="75%" resize="{mx.effects.Resize}"/>
+									<s:Group left="30">
+										<mx:Text leading="-1" text="Privacy Policy - Terms of Use - Help - More From MapQuest AOL" fontSize="10" x="-2" y="255"/>
+										<mx:Text leading="-1" text="© 2010 MapQuest, Inc.More From MapQuest AOL© 2010 MapQuest, Inc." fontSize="10" x="-2" y="266"/>
+										<mx:Image left="23" useHandCursor="true" id="addImg" buttonMode="true" source="assets/images/mq-white2b/Image_0009.png" y="4"/>
+									</s:Group>
+								</s:VGroup>
+								
+								<mx:Canvas id="slide" backgroundColor="#F7F7F7" width="10" height="100%" click="rsBtn_clickHandler(event)">
+									<mx:Image id="arrow" source="@Embed('assets/images/mq-white2b/arrow_back.png')" y="300"/>
+								</mx:Canvas>
+								<!--<s:Button id="rsBtn" click="" label="test"/>  More From MapQuest AOL© 2010 MapQuest, Inc. All rights reserved.Privacy Policy - Terms of Use - Help - More From MapQuest AOL© 2010 MapQuest, Inc. All rights reserved.-->
+							</s:HGroup>
+							
+						</mx:Canvas>
+						<mx:Canvas id="mapHolder" height="100%" width="{bholder.width-resPanel.width}" 
+								   resizeEffect="{mx.effects.Resize}"
+								   dropShadowEnabled="true" dropShadowColor="#666666" borderColor="#CCCCCC" shadowDirection="left" shadowDistance="10">
+							
+							<view:MapPanel left="10" id="mapPanel" widthVal="{mapHolder.width}" width="100%" height="100%"/>
+						</mx:Canvas>
+					</s:HGroup>
+				</s:VGroup>
+			
+			
+			
+		</mx:Canvas>
+	</s:VGroup>
+</s:Application>
