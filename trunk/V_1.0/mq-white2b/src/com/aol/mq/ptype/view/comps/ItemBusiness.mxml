@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/halo" creationComplete="creationCompleteHandler(event)" width="100%">
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.model.ModelLocator;
+			import com.aol.mq.ptype.vo.SearchVO;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			public var vo:SearchVO;
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				nameTxt.text = vo.name;
+				// TODO Auto-generated method stub
+			}
+
+
+			protected function nameTxt_clickHandler(event:MouseEvent):void
+			{
+				ModelLocator.getInstance().mapPanel.map.setCenter(vo.latlng,12)
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Border useHandCursor="true" buttonMode="true" width="100%" x="0" y="0" borderAlpha="0" height="{this.phone.y+this.phone.height+5}" >
+		
+		
+		<s:Label id="nameTxt" color="#0886B5" x="41" width="100%" y="12" fontWeight="bold" fontFamily="Verdana" textDecoration="underline"
+				 click="nameTxt_clickHandler(event)" buttonMode="true" useHandCursor="true"/>
+		<mx:Image source="@Embed('assets/images/mq-white2b/ball.png')" x="7" y="8"/>
+		<s:Label text="{vo.slNo}"  x="13" y="15" color="#FCFCFD" fontSize="12" fontWeight="bold" fontFamily="Verdana"/>
+		<mx:Text x="41" id="addr" selectable="false" text="{vo.address+','+vo.city+','+vo.state}" y="28" fontSize="11" fontFamily="Verdana"/>
+		<mx:Text x="41" id="phone" selectable="false" text="{vo.phone}" y="{addr.height+addr.y-5}"/>
+		<mx:HRule x="10" id="rule" height="1" width="96%" y="0"/>
+		
+	</s:Border>
+</s:Group>

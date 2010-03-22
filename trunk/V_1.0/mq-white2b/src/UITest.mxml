@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/halo" minWidth="1024" minHeight="768" xmlns:components="components.*" creationComplete="application1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.aol.mq.ptype.controller.MapManger;
+			import com.aol.mq.ptype.events.WinstonEvent;
+			import components.ResultBox;
+			
+			
+			import mx.events.FlexEvent;
+			
+
+			protected function addBtn_clickHandler(event:MouseEvent):void
+			{
+				//var result:ResultBox =  ResultBox();
+				//this.boxer.addElement(result);
+				var rslt:ResultBox = new ResultBox();
+				this.boxer.addElement(rslt);
+			}
+
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				MapManger.getInstance().addEventListener("close",closeEventHandler);
+			}
+			
+			private function closeEventHandler(event:WinstonEvent):void	{
+				this.boxer.removeElement(event.data);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Button id="addBtn" label="Add Box" x="490" y="20" click="addBtn_clickHandler(event)"/>
+
+		<mx:VBox height="400">
+			<s:VGroup width="100%" height="100%" gap="10" id="boxer"/>
+		</mx:VBox>
+		
+
+
+</s:Application>

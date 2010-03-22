@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 width="100%" height="100%" creationComplete="creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				ad.x = this.width-ad.width-10;
+				this.ad.y = this.height/2-ad.height/2
+			}
+
+
+			protected function clickHandler(event:MouseEvent):void
+			{
+				mx.controls.Alert.show("Demo Version","Winston Prototype");
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Rect id="backgroundRect" left="0" right="0" top="0" bottom="0"  >
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="#FFFFFF" />
+				<s:GradientEntry color="#ececec" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<mx:Image source="assets/images/mq-white2b/Image_0002.png" id="ad"/>
+	<mx:Image source="@Embed('assets/images/mq-white2b/Image_0012.png')" x="20" y="22"/>
+	<s:Button click="clickHandler(event)" x="212" y="25" skinClass="skins.ButtonTop" label="Print" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="55" fontFamily="Verdana"/>
+	<s:Button click="clickHandler(event)" x="282" y="25" skinClass="skins.ButtonTop" label="Send" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="55" fontFamily="Verdana"/>
+	<s:Button click="clickHandler(event)" x="352" y="25" skinClass="skins.ButtonTop" label="Share" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="60" fontFamily="Verdana"/>
+	<s:Label click="clickHandler(event)" x="427" y="29" text="Sign in   |   Settings" color="#2996D6" fontWeight="bold" fontSize="11" height="18" width="160" fontFamily="Verdana"/>
+	
+	<!--<mx:LinkButton label="Sign in" x="434" y="25" color="#2996D6"  fontSize="11" height="18" width="63" fontFamily="Verdana" fontWeight="bold" />
+	<mx:LinkButton label="Settings" x="484" y="25" color="#2996D6"  fontSize="11" height="18" width="73" fontFamily="Verdana" fontWeight="bold" />-->
+</s:Group>
+
